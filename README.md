@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CampusFix — Smart Campus Issue & Maintenance Portal
 
-## Getting Started
+CampusFix is a centralized campus issue-reporting and maintenance-management web application. It connects students, faculty, and administrators to report problems, eliminate duplicates, prioritize repairs, publish official progress updates, and track transparent resolutions.
 
-First, run the development server:
+---
 
+## Key Features
+
+### 1. Modern Glassmorphism Visual Identity
+- Clean, modern SaaS aesthetic inspired by soft glassmorphism cards and vibrant campus colors.
+- Responsive design tailored for mobile, tablet, and desktop viewports.
+- Accessible contrast, clear typography, and Lucide icons.
+
+### 2. Public Experience
+- **Home (`/`)**: Hero section, problem statements, three-step workflow, features grid, benefits breakdown, and call to action.
+- **About (`/about`)**: Platform mission, campus community goals, and workflow breakdown.
+- **Features (`/features`)**: Complete overview of reporting, duplicate awareness, triage, notifications, and analytics.
+- **FAQs (`/faqs`)**: Interactive accordion answering common campus maintenance questions.
+- **Contact Us (`/contact`)**: Inquiries submission form with real-time field validation.
+
+### 3. Authentication & Profile Security
+- Powered by Supabase Authentication.
+- Glassmorphism authentication cards for **Sign In (`/login`)**, **Sign Up (`/signup`)**, and **Password Recovery (`/forgot-password`)**.
+- Automatic profile creation trigger on signup with guaranteed default `student` role.
+- Server-side route protection preventing unauthorized access to protected student and administrative dashboards.
+
+### 4. Student & Faculty Dashboard
+- **Overview (`/dashboard`)**: KPI metrics (Total Submitted, Open, In Progress, Resolved) and quick links.
+- **Campus Issue Feed (`/issues`)**: Filter by category, building, urgency, and status; search by keywords; community upvoting; pagination.
+- **Guided Issue Reporting (`/issues/new`)**: Step 1 searches for existing issues to prevent duplicates; Step 2 provides validated submission.
+- **Issue Details (`/issues/[id]`)**: Full chronological action timeline, public updates, upvote counter, and post-resolution feedback form.
+- **My Reports (`/my-issues`)**: Personal submissions management with edit and delete capabilities while issues remain `Open`.
+- **Notification Center (`/notifications`)**: In-app alerts for status updates, team assignments, and resolution notes.
+- **Profile (`/profile`)**: Manage personal details and display names.
+
+### 5. Campus Administration Portal
+- **Admin Overview (`/admin`)**: Operational control center with live KPIs, Priority Triage Queue (Critical & High urgency), and category breakdowns.
+- **Issue Management (`/admin/issues`)**: Full triage table with filters, search, sorting, and direct link to triage controls.
+- **Comprehensive Triage Control (`/admin/issues/[id]`)**:
+  - Adjust urgency levels and link duplicate canonical reports.
+  - Assign maintenance teams (IT, Electrical, Plumbing, Labs, Carpentry).
+  - Post official public progress updates (notifies reporter).
+  - Save confidential internal notes (hidden from students via PostgreSQL RLS).
+  - Execute validated status transitions (`Open` &rarr; `In Progress` &rarr; `Resolved` / `Rejected` / `Closed`) with mandatory reasons.
+- **Operational Analytics (`/admin/analytics`)**: Real database analytics tracking resolution rate, average and median resolution time in hours, category charts, building distributions, and most upvoted issues.
+- **Users & Roles (`/admin/users`)**: Search campus accounts and manage role assignments.
+- **Campus Settings (`/admin/settings`)**: Maintain building catalogs, maintenance teams, and SLA targets.
+
+---
+
+## Technology Stack
+
+- **Framework**: Next.js 16 (App Router, Server Actions, Server Components)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4 with custom glassmorphism styles
+- **Icons**: Lucide React
+- **Backend & Database**: Supabase PostgreSQL with Row Level Security (RLS)
+- **Authentication**: Supabase Auth with server-side cookie verification (`@supabase/ssr`)
+- **Deployment Target**: Vercel
+
+---
+
+## Local Development Setup
+
+### 1. Prerequisites
+- Node.js 18+ (tested on v24)
+- npm or pnpm
+
+### 2. Clone and Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd Campusfix
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Configure Environment Variables
+Copy `.env.example` to `.env.local`:
+```bash
+cp .env.example .env.local
+```
+Fill in your Supabase configuration:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Database Setup & Migrations
+In your Supabase project SQL Editor, run:
+1. `supabase/migrations/001_initial_schema.sql` (Tables, triggers, RLS policies)
+2. `supabase/seed.sql` (Initial buildings and maintenance teams)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To grant your user administrator access, execute:
+```sql
+UPDATE public.profiles
+SET role = 'admin'
+WHERE email = 'your-admin-email@university.edu';
+```
 
-## Learn More
+### 5. Run the Application
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Verification & Build
+To verify type safety and build output:
+```bash
+npm run build
+```
