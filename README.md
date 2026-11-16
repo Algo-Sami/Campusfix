@@ -50,6 +50,7 @@ CampusFix is a centralized campus issue-reporting and maintenance-management web
 
 ## Technology Stack
 
+- **Live Production URL**: [https://campusfix-gules.vercel.app](https://campusfix-gules.vercel.app)
 - **Framework**: Next.js 16 (App Router, Server Actions, Server Components)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4 with custom glassmorphism styles
