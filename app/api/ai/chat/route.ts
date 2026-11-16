@@ -118,7 +118,7 @@ Guidelines:
     }))
 
     const result = streamText({
-      model: google('gemini-2.0-flash'),
+      model: google('gemini-3-flash-preview'),
       messages: formattedMessages,
       system: systemPrompt,
     })
