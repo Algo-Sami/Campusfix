@@ -45,10 +45,12 @@ export default function SignupPage() {
 
     try {
       const supabase = createClient()
+      const siteOrigin = typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_APP_URL || 'https://campusfix-gules.vercel.app')
       const { data, error } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
         options: {
+          emailRedirectTo: `${siteOrigin}/auth/callback`,
           data: {
             full_name: form.full_name.trim(),
             department: form.department.trim() || null,
